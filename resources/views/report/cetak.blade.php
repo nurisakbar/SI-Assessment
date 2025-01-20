@@ -5,6 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
+    <style>
+        body{
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 10pt
+        }
+    </style>
 </head>
 <body>
     <table width="100%">
@@ -28,11 +34,23 @@
         </tr>
     </table>
 
-    <table width="100%" style="margin-top: 20px">
+    <table width="100%" style="margin-top: 10px">
         <tr>
             <th colspan="3">BERIKUT INI ADALAH HASIL SKORING DARI SETIAP BAGIAN TEST</th>
         </tr>
+        <?php
+        $REa = 0;
+        $REm = 0;
+        ?>
         @foreach($skor as $row)
+        <?php
+        if (in_array($row->jenis, ['Pemecahan Masalah', 'Dukungan Sosial', 'Penilaian Ulang', 'Pengalihan', 'Penerimaan Perasaan Menyenangkan'])):
+            $REa += $row->total_jawaban;
+        endif;
+        if (in_array($row->jenis, ['Penghindaran', 'Perenungan'])):
+            $REm += $row->total_jawaban;
+        endif;
+        ?>
         <tr>
             <td width="35%">{{ $row->jenis }}</td>
             <td width="5%">:</td>
@@ -41,7 +59,7 @@
         @endforeach
     </table>
 
-    <table width="100%" style="margin-top: 20px">
+    <table width="100%" style="margin-top: 10px">
         <tr>
             <th colspan="3">HASIL ANALISA DARI SKOR YANG DIDAPATKAN ADALAH SEBAGAI BERIKUT:</th>
         </tr>
@@ -51,7 +69,7 @@
         <tr>
             <td width="20%">Nilai REa</td>
             <td width="5%">:</td>
-            <td>103, tidak terindikasi mengalami gejaka depresi</td>
+            <td>{{$REa}}, {{ $REm < 108 ? 'memiliki strategi regulasi emosi yang baik /tinggi' : 'memiliki strategi regulasi emosi adaptif yang rendah (tidak sehat)' }}</td>
         </tr>
         <tr>
             <td colspan="3">Penilaian terhadap REm:</td>
@@ -59,11 +77,11 @@
         <tr>
             <td width="20%">Nilai REm</td>
             <td width="5%">:</td>
-            <td>23, tidak terindikasi mengalami gejaka depresi</td>
+            <td>{{$REm}}, {{$REm > 29 ? 'memiliki strategi regulasi emosi maladaptif yang rendah (sehat)' : 'memiliki strategi regulasi emosi maladaptif yang tinggi (tidak sehat)' }}</td>
         </tr>
     </table>
 
-    <table width="100%" style="margin-top: 20px">
+    <table width="100%" style="margin-top: 10px">
         <tr>
             <th>DESKRIPSI DAN PENJELASAN SETIAP DIMENSI</th>
         </tr>
