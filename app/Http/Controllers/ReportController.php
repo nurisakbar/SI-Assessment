@@ -57,6 +57,7 @@ class ReportController extends Controller
         ->leftJoin('jawaban as j', 'j.pertanyaan_id', '=', 'p.id')
         ->where('j.user_id', $request->user_id)
         ->groupBy('p.jenis')
+        ->orderByRaw("FIELD(p.jenis, 'Penghindaran', 'Perenungan') ASC")
         ->get();
 
         $pdf = PDF::loadView('report.cetak', $data);
