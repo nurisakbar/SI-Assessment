@@ -51,7 +51,7 @@
         ?>
         @foreach($skor as $row)
         <?php
-        if (in_array($row->jenis, ['Pemecahan Masalah', 'Dukungan Sosial', 'Penilaian Ulang', 'Pengalihan', 'Penerimaan Perasaan Menyenangkan'])):
+        if (in_array($row->jenis, ['Pemecahan Masalah', 'Dukungan Sosial', 'Penilaian Ulang', 'Pengalihan', 'Penerimaan perasaan menyenangkan'])):
             $REa += $row->total_jawaban;
         endif;
         if (in_array($row->jenis, ['Penghindaran', 'Perenungan'])):
@@ -99,7 +99,7 @@
         <tr>
             <td width="20%">Nilai REa</td>
             <td width="5%">:</td>
-            <td><b>{{$REa}}</b> - {!! $REm <= 108 ? 'MEMILIKI STRATEGI REGULASI EMOSI ADAPTIF RENDAH (<b><i>ADA INDIKASI GEJALA DEPRESI</i></b>)' : 'MEMILIKI STRATEGI REGULASI EMOSI ADAPTIF YANG BAIK (<b><i>TIDAK ADA INDIKASI GEJALA DEPRESI</i></b>)' !!}</td>
+            <td><b>{{$REa}}</b> - {!! $REa <= 108 ? 'MEMILIKI STRATEGI REGULASI EMOSI ADAPTIF RENDAH (<b><i>ADA INDIKASI GEJALA DEPRESI</i></b>)' : 'MEMILIKI STRATEGI REGULASI EMOSI ADAPTIF YANG BAIK (<b><i>TIDAK ADA INDIKASI GEJALA DEPRESI</i></b>)' !!}</td>
         </tr>
         <tr>
             <td colspan="3">Penilaian terhadap REm:</td>
@@ -192,7 +192,7 @@
             <td width="33%">
                 <h3>Strategi Regulasi Emosi Adaptif (REa)</h3>
             </td>
-            <td width="33%">{!! $REm <= 108 ? 'MEMILIKI STRATEGI REGULASI EMOSI ADAPTIF RENDAH (<b><i>ADA INDIKASI GEJALA DEPRESI</i></b>)' : 'MEMILIKI STRATEGI REGULASI EMOSI ADAPTIF YANG BAIK (<b><i>TIDAK ADA INDIKASI GEJALA DEPRESI</i></b>)' !!}</td>
+            <td width="33%">{!! $REa <= 108 ? 'MEMILIKI STRATEGI REGULASI EMOSI ADAPTIF RENDAH (<b><i>ADA INDIKASI GEJALA DEPRESI</i></b>)' : 'MEMILIKI STRATEGI REGULASI EMOSI ADAPTIF YANG BAIK (<b><i>TIDAK ADA INDIKASI GEJALA DEPRESI</i></b>)' !!}</td>
             <td>Bantu remaja mempertahankan keterampilan regulasi emosi yang sehat. Berikan tantangan yang mendorong untuk  menggunakan strategi adaptif dalam situasi baru.</td>
         </tr>
         <tr>
