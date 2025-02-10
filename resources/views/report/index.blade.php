@@ -32,9 +32,14 @@
                         <div class="card">
                            <div class="card-header">
                               <h4 class="card-title">Report</h4>
-                              <a href="{{ route('report.export') }}" class="btn btn-primary btn-sm">
-                                 <i data-feather='file'></i> Export
-                              </a>
+                              <div class="d-inline-block">
+                                 <a href="{{ route('report.export') }}" class="btn btn-primary btn-sm">
+                                     <i data-feather='file'></i> Export
+                                 </a>
+                                 <a href="{{ route('report.cetak-bulk') }}" class="btn btn-info btn-sm">
+                                     <i data-feather='file-text'></i> Download Bulk
+                                 </a>
+                             </div>                             
                           </div>
                            <div class="card-body">
                               <div class="table-responsive">

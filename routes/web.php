@@ -34,6 +34,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('report', [App\Http\Controllers\ReportController::class, 'index'])->name('report.index');
     Route::get('report/export', [App\Http\Controllers\ReportController::class, 'export'])->name('report.export');
     Route::get('report/cetak', [App\Http\Controllers\ReportController::class, 'cetak'])->name('report.cetak');
+    Route::get('report/cetak-bulk', [App\Http\Controllers\ReportController::class, 'cetakBulk'])->name('report.cetak-bulk');
     Route::post('report/detail', [App\Http\Controllers\ReportController::class, 'detail'])->name('report.detail');
     Route::get('report/excel', 'App\Http\Controllers\ReportController@excel')->name('report.excel');
 });
