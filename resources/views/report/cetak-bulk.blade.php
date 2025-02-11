@@ -45,7 +45,9 @@
         <tr>
             <td width="20%">Tanggal Assesment</td>
             <td width="5%">:</td>
-            <td>{{ \Carbon\Carbon::parse($tanggal_submit->created_at)->translatedFormat('d M Y') ?? '' }}</td>
+            <td>
+                {{ isset($tanggal_submit->created_at) ? \Carbon\Carbon::parse($tanggal_submit->created_at)->translatedFormat('d M Y') : '-' }}
+            </td>
         </tr>
     </table>
 
