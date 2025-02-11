@@ -11,6 +11,7 @@ use App\Models\Jawaban;
 use Maatwebsite\Excel\Facades\Excel;
 use PDF;
 use ZipArchive;
+use Illuminate\Support\Facades\File;
 
 class ReportController extends Controller
 {
@@ -70,14 +71,21 @@ class ReportController extends Controller
 
     public function cetakBulk()
     {
+        set_time_limit(0);
+        ini_set('max_execution_time', 0);
+
         $users = User::where('level', 'guest')->get();
+        if ($users->isEmpty()) {
+            return response()->json(['message' => 'Tidak ada user guest untuk diproses'], 404);
+        }
+
         $zipFileName = 'REPORT-BULK.zip';
         $zipPath = storage_path('app/public/' . $zipFileName);
         $pdfFiles = [];
 
         $tempFolder = storage_path('app/public/temp-pdf/');
-        if (!file_exists($tempFolder)) {
-            mkdir($tempFolder, 0777, true);
+        if (!File::exists($tempFolder)) {
+            File::makeDirectory($tempFolder, 0777, true, true);
         }
 
         foreach ($users as $user) {
@@ -96,25 +104,38 @@ class ReportController extends Controller
 
             $data['tanggal_submit'] = Jawaban::where('user_id', $user->id)->first();
 
-            $pdf = PDF::loadView('report.cetak-bulk', $data);
-            $fileName = 'Report ' . $user->name . '.pdf';
+            // Mencegah error jika nama mengandung karakter tidak valid untuk file
+            $safeFileName = preg_replace('/[^\w\-\.]/', '_', $user->name);
+            $fileName = 'Report_' . $safeFileName . '.pdf';
             $filePath = $tempFolder . $fileName;
+
+            // Generate PDF
+            $pdf = PDF::loadView('report.cetak-bulk', $data);
             $pdf->save($filePath);
             $pdfFiles[] = $filePath;
         }
 
+        // Membuat file ZIP
         $zip = new ZipArchive;
         if ($zip->open($zipPath, ZipArchive::CREATE | ZipArchive::OVERWRITE) === TRUE) {
             foreach ($pdfFiles as $file) {
-                $zip->addFile($file, basename($file));
+                if (File::exists($file)) {
+                    $zip->addFile($file, basename($file));
+                }
             }
             $zip->close();
+        } else {
+            return response()->json(['message' => 'Gagal membuat file ZIP'], 500);
         }
 
+        // Hapus file PDF setelah dimasukkan ke dalam ZIP
         foreach ($pdfFiles as $file) {
-            unlink($file);
+            if (File::exists($file)) {
+                File::delete($file);
+            }
         }
 
+        // Kirim file ZIP ke pengguna dan hapus setelah dikirim
         return response()->download($zipPath)->deleteFileAfterSend(true);
-        }
+    }
 }
