@@ -23,6 +23,12 @@ class HomeController extends Controller
 
     public function store(Request $request)
     {
+        $user = \Auth::user();
+
+        if ($user->tokens <= 0) {
+            return redirect()->route('token.index')->with('warning', 'Saldo token Anda tidak cukup. Silakan beli token terlebih dahulu.');
+        }
+
         $data = $request->all();
         // Loop melalui semua jawaban dari input
         foreach ($data as $key => $value) {
@@ -35,11 +41,14 @@ class HomeController extends Controller
                 Jawaban::create([
                     'pertanyaan_id' => $pertanyaan_id,
                     'jawaban' => $value,
-                    'user_id' => \Auth::user()->id
+                    'user_id' => $user->id
                 ]);
             }
         }
-        return redirect()->route('assessment.index')->with('success', 'Jawaban berhasil disimpan.');
+        $user->tokens = $user->tokens - 1;
+        $user->save();
+
+        return redirect()->route('assessment.index')->with('success', 'Jawaban berhasil disimpan. 1 token telah terpakai.');
     }
 
     public function forgotPassword(Request $request)

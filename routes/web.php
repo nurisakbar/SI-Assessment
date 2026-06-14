@@ -24,6 +24,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('assessment.index');
     Route::post('assessment/store', [App\Http\Controllers\HomeController::class, 'store'])->name('assessment.store');
 
+    Route::get('token', [App\Http\Controllers\TokenController::class, 'index'])->name('token.index');
+    Route::post('token/checkout', [App\Http\Controllers\TokenController::class, 'checkout'])->name('token.checkout');
+    Route::post('token/confirm', [App\Http\Controllers\TokenController::class, 'confirmFromClient'])->name('token.confirm');
+    Route::post('midtrans/notification', [App\Http\Controllers\TokenController::class, 'notification'])->name('midtrans.notification');
+
     Route::get('pertanyaan/excel', 'App\Http\Controllers\PertanyaanController@excel')->name('pertanyaan.excel');
     Route::post('pertanyaan/delete', 'App\Http\Controllers\PertanyaanController@delete')->name('pertanyaan.delete');
     Route::resource('pertanyaan', 'App\Http\Controllers\PertanyaanController');

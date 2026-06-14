@@ -12,16 +12,17 @@
             position: relative;
             margin: 0;
             padding: 0;
-            background-image: url('watermak.png'); /* Path to your watermark image */
+            background-image: url('new-watermak.png'); /* Path to your watermark image */
             background-repeat: no-repeat;
-            background-size: cover;
+            background-size: 300px;
             background-position: center center;
             background-attachment: fixed; /* Keep the background in place while scrolling */
             opacity: 0.2;
             z-index: -1;
         }
         @page {
-            background: url('watermak.png') center center no-repeat;
+            background: url('new-watermak.png') center center no-repeat;
+            background-size: 300px;
             background-attachment: fixed;
         }
     </style>

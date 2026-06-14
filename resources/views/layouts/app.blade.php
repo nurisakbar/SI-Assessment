@@ -104,6 +104,12 @@
                             <span class="menu-title text-truncate" data-i18n="Modal Examples">Question</span>
                         </a>
                     </li>
+                    <li class="nav-item {!!(Request::is('token*')) ? ' active' : '' !!}">
+                        <a class="d-flex align-items-center" href="{{ route('token.index') }}">
+                            <i data-feather='credit-card'></i>
+                            <span class="menu-title text-truncate" data-i18n="Tokens">Token Saya ({{ Auth::user()->tokens ?? 0 }})</span>
+                        </a>
+                    </li>
                     @endif
                     @if(Auth::user()->level == 'super')
                     <li class="nav-item {!! (Request::is('pertanyaan*') || Request::is('user*')) ? 'active open' : '' !!}">

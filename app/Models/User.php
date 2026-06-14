@@ -23,7 +23,8 @@ class User extends Authenticatable
         'password',
         'level',
         'tanggal_lahir',
-        'pekerjaan'
+        'pekerjaan',
+        'tokens',
     ];
 
     /**
@@ -47,5 +48,10 @@ class User extends Authenticatable
 
     public function jawaban(){
         return $this->belongsTo(Jawaban::class, 'id', 'user_id');
+    }
+
+    public function tokenTransactions()
+    {
+        return $this->hasMany(TokenTransaction::class);
     }
 }
