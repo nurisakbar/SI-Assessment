@@ -25,6 +25,7 @@ class User extends Authenticatable
         'tanggal_lahir',
         'pekerjaan',
         'tokens',
+        'free_trial_remaining',
     ];
 
     /**
@@ -44,6 +45,7 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'free_trial_remaining' => 'integer',
     ];
 
     public function jawaban(){
@@ -53,5 +55,32 @@ class User extends Authenticatable
     public function tokenTransactions()
     {
         return $this->hasMany(TokenTransaction::class);
+    }
+
+    public function hasFreeTrialAvailable(): bool
+    {
+        if (! config('app.free_trial_enabled', true)) {
+            return false;
+        }
+
+        if ($this->level !== 'guest') {
+            return false;
+        }
+
+        return ($this->free_trial_remaining ?? 0) > 0;
+    }
+
+    public function freeTrialRemaining(): int
+    {
+        if (! config('app.free_trial_enabled', true) || $this->level !== 'guest') {
+            return 0;
+        }
+
+        return max(0, (int) ($this->free_trial_remaining ?? 0));
+    }
+
+    public function canAccessAssessment(): bool
+    {
+        return $this->tokens > 0 || $this->hasFreeTrialAvailable();
     }
 }

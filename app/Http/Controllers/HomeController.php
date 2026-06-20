@@ -18,6 +18,9 @@ class HomeController extends Controller
         }
         $data['questions'] = Pertanyaan::with('jawaban')->get();
         $data['cek_jawaban'] = Jawaban::where('user_id', \Auth::user()->id)->count();
+        $data['hasFreeTrial'] = \Auth::user()->hasFreeTrialAvailable();
+        $data['freeTrialRemaining'] = \Auth::user()->freeTrialRemaining();
+        $data['canAccessAssessment'] = \Auth::user()->canAccessAssessment();
         return view('welcome', $data);
     }
 
@@ -25,7 +28,7 @@ class HomeController extends Controller
     {
         $user = \Auth::user();
 
-        if ($user->tokens <= 0) {
+        if (! $user->canAccessAssessment()) {
             return redirect()->route('token.index')->with('warning', 'Saldo token Anda tidak cukup. Silakan beli token terlebih dahulu.');
         }
 
@@ -45,10 +48,20 @@ class HomeController extends Controller
                 ]);
             }
         }
-        $user->tokens = $user->tokens - 1;
+        $usedFreeTrial = false;
+        if ($user->tokens > 0) {
+            $user->tokens = $user->tokens - 1;
+        } elseif ($user->hasFreeTrialAvailable()) {
+            $user->free_trial_remaining = $user->free_trial_remaining - 1;
+            $usedFreeTrial = true;
+        }
         $user->save();
 
-        return redirect()->route('assessment.index')->with('success', 'Jawaban berhasil disimpan. 1 token telah terpakai.');
+        $message = $usedFreeTrial
+            ? 'Jawaban berhasil disimpan. Sisa free trial: ' . $user->free_trial_remaining . ' kali.'
+            : 'Jawaban berhasil disimpan. 1 token telah terpakai.';
+
+        return redirect()->route('assessment.index')->with('success', $message);
     }
 
     public function forgotPassword(Request $request)

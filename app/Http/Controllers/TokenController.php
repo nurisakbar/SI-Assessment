@@ -19,6 +19,8 @@ class TokenController extends Controller
             'user' => $user,
             'transactions' => $transactions,
             'clientKey' => Config::get('services.midtrans.client_key'),
+            'hasFreeTrial' => $user->hasFreeTrialAvailable(),
+            'freeTrialRemaining' => $user->freeTrialRemaining(),
         ]);
     }
 

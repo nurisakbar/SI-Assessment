@@ -37,6 +37,19 @@
                         Terima kasih atas jawaban yang telah Anda kirimkan.
                     </div>
                 </div>
+                @elseif($hasFreeTrial ?? false)
+                <div class="col-md-12">
+                    <div class="alert alert-info p-2">
+                        Anda menggunakan <strong>Free Trial</strong> — sisa {{ $freeTrialRemaining ?? 0 }} kali assesment gratis. Setelah habis, beli token untuk assesment berikutnya.
+                    </div>
+                </div>
+                @elseif(!($canAccessAssessment ?? true))
+                <div class="col-md-12">
+                    <div class="alert alert-warning p-2">
+                        Saldo token tidak cukup dan free trial sudah digunakan.
+                        <a href="{{ route('token.index') }}" class="alert-link">Beli token</a> untuk melanjutkan assesment.
+                    </div>
+                </div>
                 @endif
                 {{ Form::open(['url'=>route('assessment.store'),'class'=>'form-horizontal','files'=>true, 'id'=>'assessmentForm'])}}
                  <div class="col-md-12">
@@ -109,7 +122,7 @@
                         </div>
                     @endforeach
 
-                    @if($cek_jawaban == 0)
+                    @if($cek_jawaban == 0 && ($canAccessAssessment ?? true))
                     <div class="form-group">
                         <button class="btn btn-primary">Kirim</button>
                     </div>

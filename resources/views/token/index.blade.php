@@ -19,6 +19,17 @@
         </div>
 
         <div class="content-body">
+            @if($hasFreeTrial ?? false)
+            <div class="alert alert-info mb-2">
+                <strong>Free Trial tersedia!</strong> Anda dapat melakukan {{ $freeTrialRemaining ?? 10 }} kali assesment secara gratis tanpa membeli token.
+                <a href="{{ route('assessment.index') }}" class="alert-link">Mulai assesment sekarang</a>
+            </div>
+            @elseif(!($user->tokens > 0))
+            <div class="alert alert-warning mb-2">
+                Free trial sudah digunakan. Beli token untuk melanjutkan assesment berikutnya.
+            </div>
+            @endif
+
             <section id="token-balance">
                 <div class="row match-height">
                     <div class="col-lg-4 col-md-6 col-12">
@@ -26,6 +37,9 @@
                             <div class="card-body text-center">
                                 <h3 class="mb-1">Saldo Token</h3>
                                 <h1 class="fw-bolder display-4 text-primary mb-25">{{ $user->tokens }}</h1>
+                                @if($hasFreeTrial ?? false)
+                                    <span class="badge bg-light-success mb-1">+ {{ $freeTrialRemaining ?? 0 }} Free Trial</span>
+                                @endif
                                 <p class="text-muted mb-1">1 token = Rp 10.000</p>
                                 <p class="text-muted small mb-0">Token digunakan setiap kali Anda menyelesaikan 1 kali assesment.</p>
                             </div>
@@ -33,6 +47,23 @@
                     </div>
 
                     <div class="col-lg-8 col-md-6 col-12">
+                        <div class="card mb-2 border-success">
+                            <div class="card-body d-flex flex-column flex-md-row justify-content-between align-items-md-center">
+                                <div>
+                                    <h4 class="card-title mb-25 text-success">Free Trial</h4>
+                                    @if($hasFreeTrial ?? false)
+                                        <p class="text-muted mb-0">Coba {{ config('app.free_trial_limit', 10) }} kali assesment secara gratis. Sisa free trial Anda: <strong>{{ $freeTrialRemaining ?? 0 }}</strong>.</p>
+                                    @else
+                                        <p class="text-muted mb-0">Free trial sudah digunakan. Silakan beli token untuk assesment selanjutnya.</p>
+                                    @endif
+                                </div>
+                                @if($hasFreeTrial ?? false)
+                                    <a href="{{ route('assessment.index') }}" class="btn btn-success mt-1 mt-md-0">Gunakan Free Trial</a>
+                                @else
+                                    <span class="badge bg-light-secondary mt-1 mt-md-0">Sudah dipakai</span>
+                                @endif
+                            </div>
+                        </div>
                         <div class="card mb-0">
                             <div class="card-header border-bottom">
                                 <h4 class="card-title mb-0">Paket Token</h4>

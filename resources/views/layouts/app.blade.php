@@ -107,7 +107,9 @@
                     <li class="nav-item {!!(Request::is('token*')) ? ' active' : '' !!}">
                         <a class="d-flex align-items-center" href="{{ route('token.index') }}">
                             <i data-feather='credit-card'></i>
-                            <span class="menu-title text-truncate" data-i18n="Tokens">Token Saya ({{ Auth::user()->tokens ?? 0 }})</span>
+                            <span class="menu-title text-truncate" data-i18n="Tokens">
+                                Token Saya ({{ Auth::user()->tokens ?? 0 }}@if(Auth::user()->hasFreeTrialAvailable()) + {{ Auth::user()->freeTrialRemaining() }} Trial@endif)
+                            </span>
                         </a>
                     </li>
                     @endif
