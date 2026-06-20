@@ -143,64 +143,59 @@
 
 @push('scripts')
 <script>
-    document.querySelector('form').addEventListener('submit', function (e) {
-        const questions = document.querySelectorAll('.card'); // Semua pertanyaan
+    document.getElementById('assessmentForm').addEventListener('submit', function (event) {
+        event.preventDefault();
+
+        const form = this;
+        const questions = document.querySelectorAll('.card');
         let allAnswered = true;
 
-        questions.forEach(card => {
-            const radios = card.querySelectorAll('input[type="radio"]');
-            const isAnswered = Array.from(radios).some(radio => radio.checked);
-
-            if (!isAnswered) {
-                allAnswered = false;
-                card.style.border = '2px solid red'; // Tandai pertanyaan yang belum diisi
-            } else {
-                card.style.border = 'none'; // Hilangkan tanda jika sudah diisi
-            }
-        });
-
-        if (!allAnswered) {
-            e.preventDefault(); // Hentikan submit
-            alert('Harap isi semua pertanyaan sebelum melanjutkan.');
-        }
-    });
-
-    document.getElementById('assessmentForm').addEventListener('submit', function(event) {
-        const questions = document.querySelectorAll('.card'); // Ambil semua pertanyaan
-        let allAnswered = true;
-
-        questions.forEach(question => {
+        questions.forEach(function (question) {
             const radios = question.querySelectorAll('input[type="radio"]');
-            const isAnswered = Array.from(radios).some(radio => radio.checked);
+            const isAnswered = Array.from(radios).some(function (radio) {
+                return radio.checked;
+            });
 
             if (!isAnswered) {
                 allAnswered = false;
-                question.style.border = '2px solid #ff9797'; // Tambahkan border merah untuk menandai
+                question.style.border = '2px solid #ff9797';
             } else {
-                question.style.border = ''; // Hapus border merah jika sudah terjawab
+                question.style.border = '';
             }
         });
 
         if (!allAnswered) {
-            event.preventDefault(); // Hentikan pengiriman formulir
-            swal("Pertanyaan Belum Terjawab!", "Harap jawab semua pertanyaan sebelum mengirimkan.", {
-                icon : "warning",
-                buttons: {        			
-                confirm: {
-                    className : 'btn btn-success'
-                }
+            swal('Pertanyaan Belum Terjawab!', 'Harap jawab semua pertanyaan sebelum mengirimkan.', {
+                icon: 'warning',
+                buttons: {
+                    confirm: {
+                        className: 'btn btn-success'
+                    }
                 },
             });
-        }else{
-            swal("Berhasil mengirim jawaban", "Semua jawaban berhasil disimpan.", {
-                icon : "success",
-                buttons: {        			
-                confirm: {
-                    className : 'btn btn-success'
-                }
-                },
-            });
+            return;
         }
+
+        swal({
+            title: 'Konfirmasi Pengiriman',
+            text: 'Apakah Anda yakin ingin mengirim jawaban? Jawaban yang sudah dikirim tidak dapat diubah.',
+            icon: 'warning',
+            buttons: {
+                cancel: {
+                    text: 'Batal',
+                    visible: true,
+                    className: 'btn btn-outline-secondary',
+                },
+                confirm: {
+                    text: 'Ya, Kirim',
+                    className: 'btn btn-primary',
+                },
+            },
+        }).then(function (confirmed) {
+            if (confirmed) {
+                form.submit();
+            }
+        });
     });
 </script>
 @endpush
