@@ -28,22 +28,23 @@
                 <!-- Dashboard Analytics Start -->
                 <section id="dashboard-analytics">
                   <div class="row">
+                     <div class="col-md-12 mb-1 d-flex justify-content-end">
+                        <a href="{{ route('report.export') }}" class="btn btn-primary btn-sm me-50">
+                            <i data-feather='file'></i> Export
+                        </a>
+                        <a href="{{ route('report.cetak-bulk') }}" class="btn btn-info btn-sm">
+                            <i data-feather='file-text'></i> Download Bulk
+                        </a>
+                     </div>
+                     @forelse($groups as $kelompok => $rows)
                      <div class="col-md-12">
                         <div class="card">
                            <div class="card-header">
-                              <h4 class="card-title">Report</h4>
-                              <div class="d-inline-block">
-                                 <a href="{{ route('report.export') }}" class="btn btn-primary btn-sm">
-                                     <i data-feather='file'></i> Export
-                                 </a>
-                                 <a href="{{ route('report.cetak-bulk') }}" class="btn btn-info btn-sm">
-                                     <i data-feather='file-text'></i> Download Bulk
-                                 </a>
-                             </div>                             
-                          </div>
+                              <h4 class="card-title mb-0">{{ $kelompok }} <span class="badge bg-light-primary">{{ $rows->count() }}</span></h4>
+                           </div>
                            <div class="card-body">
                               <div class="table-responsive">
-                                 <table id="basic-datatables" class="display table table-striped table-hover">
+                                 <table class="report-table display table table-striped table-hover">
                                     <thead>
                                        <tr>
                                           <th style="width: 5%">No</th>
@@ -54,7 +55,7 @@
                                        </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach($model as $row)
+                                        @foreach($rows as $row)
                                        <tr>
                                           <td>{{ $loop->iteration }}</td>
                                           <td>{{ $row->name}}</td>
@@ -76,6 +77,13 @@
                            </div>
                         </div>
                      </div>
+                     @empty
+                     <div class="col-md-12">
+                        <div class="card">
+                           <div class="card-body text-center text-muted">Belum ada peserta.</div>
+                        </div>
+                     </div>
+                     @endforelse
                   </div>
 
                     <!--/ List DataTable -->
@@ -100,6 +108,7 @@
 @push('scripts')
 <script>
 $(document).ready(function() {
+   $('.report-table').DataTable();
 
    $('.detail').click(function(e) {
       var id = $(this).data('id'); 

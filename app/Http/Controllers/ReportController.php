@@ -17,7 +17,21 @@ class ReportController extends Controller
 {
     public function index()
     {
-        $data['model'] = User::with('jawaban')->where('level', 'guest')->get();
+        $users = User::with('jawaban')->where('level', 'guest')->orderBy('name')->get();
+        $grouped = $users->groupBy(function ($user) {
+            return $user->kelompok ?: 'Belum dipilih';
+        });
+        $order = ['MindFit at School', 'MindFit at Work', 'Belum dipilih'];
+
+        $data['groups'] = collect($order)
+            ->merge($grouped->keys()->diff($order))
+            ->mapWithKeys(function ($name) use ($grouped) {
+                return [$name => $grouped->get($name, collect())];
+            })
+            ->filter(function ($rows) {
+                return $rows->isNotEmpty();
+            });
+
         return view('report.index', $data);
     }
 
