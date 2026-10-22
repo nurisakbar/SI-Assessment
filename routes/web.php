@@ -38,6 +38,7 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('user', 'App\Http\Controllers\UserController');
 
     Route::get('report', [App\Http\Controllers\ReportController::class, 'index'])->name('report.index');
+    Route::get('report/kelompok/{kelompok}', [App\Http\Controllers\ReportController::class, 'kelompok'])->name('report.kelompok');
     Route::get('report/export', [App\Http\Controllers\ReportController::class, 'export'])->name('report.export');
     Route::get('report/cetak', [App\Http\Controllers\ReportController::class, 'cetak'])->name('report.cetak');
     Route::get('report/cetak-bulk', [App\Http\Controllers\ReportController::class, 'cetakBulk'])->name('report.cetak-bulk');

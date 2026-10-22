@@ -17,22 +17,30 @@ class ReportController extends Controller
 {
     public function index()
     {
-        $users = User::with('jawaban')->where('level', 'guest')->orderBy('name')->get();
-        $grouped = $users->groupBy(function ($user) {
-            return $user->kelompok ?: 'Belum dipilih';
+        $data['groups'] = collect(User::kelompokGroups())->map(function ($label, $key) {
+            return [
+                'key' => $key,
+                'label' => $label,
+                'total' => User::where('level', 'guest')->inKelompok($key)->count(),
+            ];
         });
-        $order = ['MindFit at School', 'MindFit at Work', 'Belum dipilih'];
-
-        $data['groups'] = collect($order)
-            ->merge($grouped->keys()->diff($order))
-            ->mapWithKeys(function ($name) use ($grouped) {
-                return [$name => $grouped->get($name, collect())];
-            })
-            ->filter(function ($rows) {
-                return $rows->isNotEmpty();
-            });
 
         return view('report.index', $data);
+    }
+
+    public function kelompok($kelompok)
+    {
+        abort_unless(isset(User::kelompokGroups()[$kelompok]), 404);
+
+        $data['key'] = $kelompok;
+        $data['label'] = User::kelompokGroups()[$kelompok];
+        $data['users'] = User::with('jawaban')
+            ->where('level', 'guest')
+            ->inKelompok($kelompok)
+            ->orderBy('name')
+            ->get();
+
+        return view('report.kelompok', $data);
     }
 
     public function detail(Request $request)
@@ -59,7 +67,12 @@ class ReportController extends Controller
 
     public function export(Request $request) 
     {
-        return Excel::download(new ReportExport(), 'Report Jawaban.xlsx');
+        $kelompok = $request->kelompok;
+        abort_unless(isset(User::kelompokGroups()[$kelompok]), 404);
+
+        $label = User::kelompokGroups()[$kelompok];
+
+        return Excel::download(new ReportExport($kelompok), 'Report '.$label.'.xlsx');
     }
 
     public function cetak(Request $request)
@@ -83,17 +96,21 @@ class ReportController extends Controller
         return $pdf->stream('keluhan_umum.pdf');
     }
 
-    public function cetakBulk()
+    public function cetakBulk(Request $request)
     {
         set_time_limit(0);
         ini_set('max_execution_time', 0);
 
-        $users = User::where('level', 'guest')->get();
+        $kelompok = $request->kelompok;
+        abort_unless(isset(User::kelompokGroups()[$kelompok]), 404);
+
+        $users = User::where('level', 'guest')->inKelompok($kelompok)->get();
         if ($users->isEmpty()) {
-            return response()->json(['message' => 'Tidak ada user guest untuk diproses'], 404);
+            alert()->warning('Tidak ada peserta pada kelompok ini', 'Kosong');
+            return redirect()->route('report.kelompok', $kelompok);
         }
 
-        $zipFileName = 'REPORT-BULK.zip';
+        $zipFileName = 'REPORT-BULK-'.$kelompok.'.zip';
         $zipPath = storage_path('app/public/' . $zipFileName);
         $pdfFiles = [];
 

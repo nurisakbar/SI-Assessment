@@ -84,4 +84,24 @@ class User extends Authenticatable
     {
         return $this->tokens > 0 || $this->hasFreeTrialAvailable();
     }
+
+    public static function kelompokGroups(): array
+    {
+        return [
+            'school' => 'MindFit at School',
+            'work' => 'MindFit at Work',
+            'belum' => 'Belum Memilih Kelompok',
+        ];
+    }
+
+    public function scopeInKelompok($query, string $key)
+    {
+        if ($key === 'belum') {
+            return $query->where(function ($q) {
+                $q->whereNull('kelompok')->orWhere('kelompok', '');
+            });
+        }
+
+        return $query->where('kelompok', self::kelompokGroups()[$key] ?? '');
+    }
 }

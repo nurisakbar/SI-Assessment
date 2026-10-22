@@ -28,62 +28,24 @@
                 <!-- Dashboard Analytics Start -->
                 <section id="dashboard-analytics">
                   <div class="row">
-                     <div class="col-md-12 mb-1 d-flex justify-content-end">
-                        <a href="{{ route('report.export') }}" class="btn btn-primary btn-sm me-50">
-                            <i data-feather='file'></i> Export
-                        </a>
-                        <a href="{{ route('report.cetak-bulk') }}" class="btn btn-info btn-sm">
-                            <i data-feather='file-text'></i> Download Bulk
-                        </a>
-                     </div>
-                     @forelse($groups as $kelompok => $rows)
                      <div class="col-md-12">
                         <div class="card">
                            <div class="card-header">
-                              <h4 class="card-title mb-0">{{ $kelompok }} <span class="badge bg-light-primary">{{ $rows->count() }}</span></h4>
+                              <h4 class="card-title mb-0">Kelompok</h4>
                            </div>
-                           <div class="card-body">
-                              <div class="table-responsive">
-                                 <table class="report-table display table table-striped table-hover">
-                                    <thead>
-                                       <tr>
-                                          <th style="width: 5%">No</th>
-                                          <th>Nama</th>
-                                          <th>Tanggal Test</th>
-                                          <th>Status</th>
-                                          <th style="width: 20%" class="text-center">Action</th>
-                                       </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach($rows as $row)
-                                       <tr>
-                                          <td>{{ $loop->iteration }}</td>
-                                          <td>{{ $row->name}}</td>
-                                          <td>{{ $row->jawaban->created_at ?? '-' }}</td>
-                                          <td>
-                                            {!! !empty($row->jawaban) ? '<span class="badge bg-success">Sudah</span>' : '<span class="badge bg-warning">Belum</span>' !!}</td>
-                                         <td class="text-center">
-                                             <div class="form-button-action">
-                                                <button type="button" class="btn btn-link btn-primary btn-sm detail" data-id="{{ $row->id }}">
-                                                  <i data-feather='eye'></i>
-                                               </button>
-                                             </div>
-                                          </td>
-                                       </tr>
-                                       @endforeach
-                                    </tbody>
-                                 </table>
-                              </div>
+                           <div class="list-group list-group-flush">
+                              @foreach($groups as $group)
+                              <a href="{{ route('report.kelompok', $group['key']) }}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                                 <span class="fw-bolder">{{ $group['label'] }}</span>
+                                 <span>
+                                    <span class="badge bg-light-primary me-50">{{ $group['total'] }} peserta</span>
+                                    <i data-feather="chevron-right"></i>
+                                 </span>
+                              </a>
+                              @endforeach
                            </div>
                         </div>
                      </div>
-                     @empty
-                     <div class="col-md-12">
-                        <div class="card">
-                           <div class="card-body text-center text-muted">Belum ada peserta.</div>
-                        </div>
-                     </div>
-                     @endforelse
                   </div>
 
                     <!--/ List DataTable -->
@@ -94,40 +56,4 @@
         </div>
     </div>
     <!-- END: Content-->
-
-    <!-- Modal -->
-<div class="modal fade" id="exampleModals" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-
-        </div>
-    </div>
-  </div>
 @endsection
-
-@push('scripts')
-<script>
-$(document).ready(function() {
-   $('.report-table').DataTable();
-
-   $('.detail').click(function(e) {
-      var id = $(this).data('id'); 
-      $('#exampleModals').modal('show');
-      $.ajax({
-               url: '{{ route('report.detail') }}',
-               method: 'post',
-               cache: false,
-               data: {
-                  "_token": "{{ csrf_token() }}",
-                  "id" :id
-               },
-               success: function(data){
-                  $('.modal-content').html(data);
-               }
-            });
-   });
-
-});
-
-</script>
-@endpush

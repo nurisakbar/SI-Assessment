@@ -10,13 +10,17 @@ use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 
 class ReportExport implements FromView, ShouldAutoSize
 {
-    /**
-    * @return \Illuminate\Support\Collection
-    */
+    protected $kelompok;
+
+    public function __construct(string $kelompok)
+    {
+        $this->kelompok = $kelompok;
+    }
+
     public function view(): View
     {
         return view('report.export', [
-            'users' => User::with('jawaban')->where('level', 'guest')->get()
+            'users' => User::with('jawaban')->where('level', 'guest')->inKelompok($this->kelompok)->get()
         ]);
     }
 }
