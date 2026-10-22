@@ -44,6 +44,7 @@
                                           <th style="width: 5%">No</th>
                                           <th>Nama</th>
                                           <th>Email</th>
+                                          <th>Pengelompokan</th>
                                           <th>Level</th>
                                           <th style="width: 20%" class="text-center">Action</th>
                                        </tr>
@@ -54,6 +55,7 @@
                                           <td>{{ $loop->iteration }}</td>
                                           <td>{{ $row->name}}</td>
                                           <td>{{ $row->email}}</td>
+                                          <td>{{ $row->kelompok ?: '-' }}</td>
                                           <td>{{ $row->level}}</td>
                                          <td class="text-center">
                                              <div class="form-button-action">

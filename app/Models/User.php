@@ -24,6 +24,7 @@ class User extends Authenticatable
         'level',
         'tanggal_lahir',
         'pekerjaan',
+        'kelompok',
         'tokens',
         'free_trial_remaining',
     ];

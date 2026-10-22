@@ -18,6 +18,7 @@ class StoreRequest extends FormRequest
             'email'                 => 'required',
             'level'                 => 'required',
             'password'              => 'required',
+            'kelompok'              => 'required|in:MindFit at School,MindFit at Work',
         ];
     }
 
@@ -28,6 +29,8 @@ class StoreRequest extends FormRequest
             'email.required'        => 'Email tidak boleh kosong',
             'level.required'        => 'Level tidak boleh kosong',
             'password.required'     => 'Password tidak boleh kosong',
+            'kelompok.required'     => 'Pengelompokan tidak boleh kosong',
+            'kelompok.in'           => 'Pengelompokan tidak valid',
         ];
     }
 }

@@ -31,6 +31,14 @@
      @if ($errors->has('pekerjaan')) <span class="help-block" style="color:red">{{ $errors->first('pekerjaan') }}</span> @endif
   </div>
 </div>
+
+<div class="form-group row mt-2">
+  <label for="kelompok" class="col-sm-2 col-form-label">Pengelompokan</label>
+  <div class="col-sm-10">
+    {{ Form::select('kelompok', ['' => 'Pilih pengelompokan', 'MindFit at School' => 'MindFit at School', 'MindFit at Work' => 'MindFit at Work'], null, ['class' => 'form-control select2', 'id' => 'kelompok']) }}
+    @if ($errors->has('kelompok')) <span class="help-block" style="color:red">{{ $errors->first('kelompok') }}</span> @endif
+  </div>
+</div>
   
   <div class="form-group row mt-2">
       <label for="inputEmail3" class="col-sm-2 col-form-label">Password</label>

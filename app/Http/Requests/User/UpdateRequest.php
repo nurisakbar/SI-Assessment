@@ -17,6 +17,7 @@ class UpdateRequest extends FormRequest
             'name'                  => 'required',
             'email'                 => 'required',
             'level'                 => 'required',
+            'kelompok'              => 'required|in:MindFit at School,MindFit at Work',
         ];
     }
 
@@ -26,6 +27,8 @@ class UpdateRequest extends FormRequest
             'name.required'         => 'Nama tidak boleh kosong',
             'email.required'        => 'Email tidak boleh kosong',
             'level.required'        => 'Level tidak boleh kosong',
+            'kelompok.required'     => 'Pengelompokan tidak boleh kosong',
+            'kelompok.in'           => 'Pengelompokan tidak valid',
         ];
     }
 }
