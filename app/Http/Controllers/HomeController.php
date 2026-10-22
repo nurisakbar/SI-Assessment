@@ -28,6 +28,10 @@ class HomeController extends Controller
     {
         $user = \Auth::user();
 
+        if ($user->level === 'guest' && empty($user->kelompok)) {
+            return redirect()->route('assessment.index')->with('warning', 'Pilih pengelompokan terlebih dahulu.');
+        }
+
         if (! $user->canAccessAssessment()) {
             return redirect()->route('token.index')->with('warning', 'Saldo token Anda tidak cukup. Silakan beli token terlebih dahulu.');
         }
@@ -82,5 +86,23 @@ class HomeController extends Controller
             }
         }
         return view('auth.forgot-password');
+    }
+
+    public function saveKelompok(Request $request)
+    {
+        $user = \Auth::user();
+
+        if ($user->level !== 'guest' || ! empty($user->kelompok)) {
+            return redirect()->route('assessment.index');
+        }
+
+        $request->validate([
+            'kelompok' => 'required|in:MindFit at School,MindFit at Work',
+        ]);
+
+        $user->kelompok = $request->kelompok;
+        $user->save();
+
+        return redirect()->route('assessment.index');
     }
 }

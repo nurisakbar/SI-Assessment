@@ -158,6 +158,39 @@
         <button class="btn btn-primary btn-icon scroll-top" type="button">
             <i data-feather="arrow-up"></i>
         </button>
+        @if(Auth::user()->level == 'guest' && empty(Auth::user()->kelompok))
+        <div class="modal fade" id="kelompokModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="kelompokModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="kelompokModalLabel">Pilih Pengelompokan</h5>
+                    </div>
+                    <form method="POST" action="{{ route('kelompok.store') }}">
+                        @csrf
+                        <div class="modal-body">
+                            <p class="text-muted mb-1">Pilih kelompok Anda sebelum mulai assesment.</p>
+                            <div class="d-grid gap-1">
+                                <label class="border rounded p-1 mb-0 d-flex align-items-center">
+                                    <input class="form-check-input me-1" type="radio" name="kelompok" value="MindFit at School" required>
+                                    <span>MindFit at School</span>
+                                </label>
+                                <label class="border rounded p-1 mb-0 d-flex align-items-center">
+                                    <input class="form-check-input me-1" type="radio" name="kelompok" value="MindFit at Work" required>
+                                    <span>MindFit at Work</span>
+                                </label>
+                            </div>
+                            @error('kelompok')
+                                <span class="text-danger small d-block mt-1">{{ $message }}</span>
+                            @enderror
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary">Lanjutkan</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        @endif
         <script src="{{ asset('app-assets/vendors/js/vendors.min.js') }}"></script>
         <script src="{{ asset('app-assets/js/core/app-menu.js') }}"></script>
         <script src="{{ asset('app-assets/js/core/app.js') }}"></script>
@@ -187,6 +220,13 @@
                         width: 14,
                         height: 14
                     });
+                }
+                var kelompokModal = document.getElementById('kelompokModal');
+                if (kelompokModal && window.bootstrap) {
+                    bootstrap.Modal.getOrCreateInstance(kelompokModal, {
+                        backdrop: 'static',
+                        keyboard: false
+                    }).show();
                 }
             })
         </script>

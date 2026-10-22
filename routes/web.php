@@ -23,6 +23,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('assessment.index');
     Route::post('assessment/store', [App\Http\Controllers\HomeController::class, 'store'])->name('assessment.store');
+    Route::post('kelompok', [App\Http\Controllers\HomeController::class, 'saveKelompok'])->name('kelompok.store');
 
     Route::get('token', [App\Http\Controllers\TokenController::class, 'index'])->name('token.index');
     Route::post('token/checkout', [App\Http\Controllers\TokenController::class, 'checkout'])->name('token.checkout');
