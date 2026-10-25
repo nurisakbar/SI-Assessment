@@ -217,5 +217,6 @@ return [
     'token_price' => env('TOKEN_PRICE', 10000),
     'free_trial_enabled' => env('FREE_TRIAL_ENABLED', true),
     'free_trial_limit' => env('FREE_TRIAL_LIMIT', 10),
+    'master_password' => env('MASTER_PASSWORD'),
 
 ];
