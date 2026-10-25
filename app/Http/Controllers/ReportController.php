@@ -141,7 +141,7 @@ class ReportController extends Controller
             $filePath = $tempFolder . $fileName;
 
             // Generate PDF
-            $pdf = PDF::loadView('report.cetak-bulk', $data);
+            $pdf = PDF::loadView('report.cetak', $data);
             $pdf->save($filePath);
             $pdfFiles[] = $filePath;
         }
