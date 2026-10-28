@@ -13,13 +13,14 @@
             margin: 0;
             padding: 0;
         }
-        .deco-top, .deco-bottom, .logo-a, .logo-b {
+        .deco-top, .deco-bottom, .logo-a, .logo-b, .logo-c {
             position: fixed;
         }
         .deco-top { top: -150px; right: -150px; width: 340px; }
         .deco-bottom { bottom: -250px; left: -70px; width: 760px; }
-        .logo-a { top: -58px; left: 0; height: 38px; }
-        .logo-b { top: -62px; left: 42px; height: 42px; }
+        .logo-a { top: -58px; left: 46px; height: 38px; }
+        .logo-b { top: -62px; left: 88px; height: 42px; }
+        .logo-c { top: -62px; left: 0; height: 42px; }
         .rahasia {
             position: fixed;
             top: -48px;
@@ -46,6 +47,7 @@
         }
         table.ident, table.skor { width: 100%; border-collapse: collapse; }
         table.ident td, table.skor td { font-size: 10.5pt; padding: 1px 0; vertical-align: top; }
+        .ident-box { border: 1px solid #222; padding: 6px 10px; }
         .label { width: 250px; white-space: nowrap; }
         .colon { width: 12px; }
         .section { font-weight: bold; text-align: center; margin: 12px 0 8px; font-size: 10.5pt; }
@@ -249,16 +251,19 @@
 <img class="deco-bottom" src="{{ $asset('deco-band.png') }}">
 <img class="logo-a" src="{{ $asset('logo-project.png') }}">
 <img class="logo-b" src="{{ $asset('logo-mindfit.png') }}">
+<img class="logo-c" src="{{ $asset('logo-sred.png') }}">
 <div class="rahasia">RAHASIA</div>
-<div class="footer">ya@gapapa.id &nbsp;&nbsp; @gapapa.project &nbsp;&nbsp; gapapa.id &nbsp;&nbsp; Jl. Nuri No.5, Demangan Baru, Kec. Depok, Kabupaten Sleman, DIY (55281)</div>
+<div class="footer">ya@gapapa.id &nbsp;&nbsp; @gapapa.project &nbsp;&nbsp; gapapa.id</div>
 
 <h3>IDENTITAS</h3>
+<div class="ident-box">
 <table class="ident">
     <tr><td class="label">Nama</td><td class="colon">:</td><td>{{ $name }}</td></tr>
     <tr><td class="label">Pekerjaan</td><td class="colon">:</td><td>{{ $user->pekerjaan ?? '' }}</td></tr>
     <tr><td class="label">Tanggal Assesment</td><td class="colon">:</td><td>{{ $tanggal }}</td></tr>
     <tr><td class="label">Pemeriksa</td><td class="colon">:</td><td>Siti Bahiyah, S.Psi., M.Psi., Psikolog</td></tr>
 </table>
+</div>
 
 <div class="section">BERIKUT INI ADALAH HASIL SKORING DARI SETIAP BAGIAN TEST</div>
 <table class="skor">

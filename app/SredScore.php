@@ -17,6 +17,22 @@ class SredScore
         'REm' => [20, 32, 45],
     ];
 
+    /**
+     * Nilai acuan (norma) pembagi rasio grafik. Diturunkan balik dari contoh
+     * "Hasil Analisa SRED-7F" (skor / rasio = bilangan bulat untuk semua dimensi).
+     */
+    public const NORMS = [
+        'Pemecahan Masalah' => 27,
+        'Dukungan Sosial' => 20,
+        'Penilaian Ulang' => 13,
+        'Pengalihan' => 11,
+        'Penerimaan perasaan menyenangkan' => 35,
+        'Penghindaran' => 13,
+        'Perenungan' => 15,
+        'REa' => 108,
+        'REm' => 29,
+    ];
+
     public static function category(string $key, int $score): string
     {
         [$rendah, $sedang] = self::BANDS[$key];
@@ -30,11 +46,9 @@ class SredScore
         return 'Tinggi';
     }
 
-    /** 2,00 = skor maksimum dimensi, supaya sumbu grafik tetap 0–2. */
+    /** Rasio = skor / norma; 1,00 berarti setara nilai acuan. */
     public static function ratio(string $key, int $score): float
     {
-        $max = self::BANDS[$key][2];
-
-        return $max > 0 ? $score / $max * 2 : 0;
+        return $score / self::NORMS[$key];
     }
 }
